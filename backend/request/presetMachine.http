@@ -1,0 +1,60 @@
+### Crea una nuova configurazione predefinita
+POST http://localhost:5050/api/v1/admin/presets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "Gaming PC preset",
+  "description": "presettata Configurazione per gaming ad alte prestazioni",
+  "category": "gaming",
+  "basePrice": 5900.99,
+  "isActive": true,
+  "components": {
+    "cpu": "67eef8caa8f393f268029dd1",
+    "motherboard": "67f0de08f0d9288e2c0026ee",
+    "ram": "67f0ef9f1fad5696ae4fa580",
+    "gpu": "67f00a674c7310d1e9f10ffe",
+    "storage": "67f0f2f8e7ffaba742730b97",
+    "powerSupply": "67f0e44f99b7e57e60274687",
+    "case": "67eefea8e63e041096424963",
+    "cooling": "67ef01e1e4d310de478d2296"
+  }
+}
+
+### Ottieni tutte le configurazioni predefinite
+GET http://localhost:5050/api/v1/admin/presets
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+### Ottieni una configurazione predefinita specifica per ID
+# Sostituisci {id} con l'ID effettivo di una configurazione dopo averla creata
+GET http://localhost:5050/api/v1/admin/presets/67f0ff522ecb4484b4632831
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+### Aggiorna una configurazione predefinita
+# Sostituisci {id} con l'ID effettivo di una configurazione
+PUT http://localhost:5050/api/v1/admin/presets/67f0ff522ecb4484b4632831
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "Gaming PC prova aggiornato",
+  "description": "Configurazione per gaming ad alte prestazioni aggiornata",
+  "category": "gaming",
+  "basePrice": 5099.99,
+  "isActive": true,
+  "components": {
+    "cpu": "67eef8caa8f393f268029dd1",
+    "motherboard": "67f0de08f0d9288e2c0026ee",
+    "ram": "67f0ef9f1fad5696ae4fa580",
+    "gpu": "67f00a674c7310d1e9f10ffe",
+    "storage": "67f0f2f8e7ffaba742730b97",
+    "powerSupply": "67f0e44f99b7e57e60274687",
+    "case": "67eefea8e63e041096424963",
+    "cooling": "67ef01e1e4d310de478d2296"
+  }
+}
+
+### Elimina una configurazione predefinita
+# Sostituisci {id} con l'ID effettivo di una configurazione
+DELETE http://localhost:5050/api/v1/admin/presets/67f0ff522ecb4484b4632831
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY

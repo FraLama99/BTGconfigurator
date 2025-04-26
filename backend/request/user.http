@@ -1,0 +1,87 @@
+POST http://localhost:5050/api/v1/users/register
+Content-Type: application/json
+
+{
+  "name": "Francesco",
+  "surname": "Lamanuzzi",
+  "email": "info@3dlama.it",
+  "birth_date": "1999-03-06", 
+  "password": "Lama3d99.", 
+  "phone": "3922642721",
+  "role": "admin",
+  "adminCode": "tuoCodiceSegreto123",
+  "address": {
+    "street": "Piazza i maggio 2",
+    "city": "Alpignano",
+    "zipCode": "10091",
+    "country": "Italy"
+  }
+}
+
+###
+GET http://localhost:5050/api/v1/users richiede disattivasione isAdmin
+
+###
+GET http://localhost:5050/api/v1/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZjU4YzlkZDIxMmM5MDg5NGEwMzg4ZiIsImlhdCI6MTc0NDQ0MTI0NCwiZXhwIjoxNzQ0NTI3NjQ0fQ.aR9VOh4ox0_WS4z_XGlaqxI4t9UKtrcM2-riF0FVqoM
+
+
+###
+POST http://localhost:5050/api/v1/users/login
+Content-Type: application/json
+
+{
+  "email": "info@3dlama.it",
+  "password": "Lama3d99."
+}
+###
+GET http://localhost:5050/api/v1/users/67eee6bb430f69769447ec54
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzcwNzIwOSwiZXhwIjoxNzQzNzkzNjA5fQ.IVbYZPtWpgH7VG0x4aGn4AM5w3Cbg08yVVmQWrRJy3k
+
+### Richiesta reset password
+POST http://localhost:5050/api/v1/users/reset-password
+Content-Type: application/json
+
+{
+  "email": "rebecca.mangherini99@gmail.com"
+}
+
+
+### Conferma reset password con il token
+POST http://localhost:5050/api/v1/users/reset-password/1587c4900de479177401d17ab06233696330f354
+Content-Type: application/json
+
+{
+  "password": "Rebymanghe99."
+}
+
+
+//per inserimento imagine usare postaman
+
+
+### Aggiorna profilo utente
+
+PUT http://localhost:5050/api/v1/users/67eee5fd430f69769447ec51
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVlNWZkNDMwZjY5NzY5NDQ3ZWM1MSIsImlhdCI6MTc0MzcxMDg0NywiZXhwIjoxNzQzNzk3MjQ3fQ.OKgFcTZqUBI70qlnJ33aXE-Nnb2MbjzUNmulmBGykcg
+
+{
+  "name": "Francesco Aggiornato",
+  "surname": "Lamanuzzi Aggiornato",
+  "email": "frastitch@gmail.com",
+  "birth_date": "1990-02-02",
+  "phone": "1234567890",
+  "address": {
+    "street": "via casso 1",
+    "city": "nichelino",
+    "zipCode": "10025",
+    "country": "Italy"
+  }
+}
+
+###
+DELETE http://localhost:5050/api/v1/users/67eecf065df2599e2fe32548
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVjZjA2NWRmMjU5OWUyZmUzMjU0OCIsImlhdCI6MTc0MzcwNDc4MywiZXhwIjoxNzQzNzkxMTgzfQ.CFTknGyMcwrdbz1kOhZjdtR6RCZZBwyCEw-6yvhczuU
+
+###
+http://localhost:5050/api/v1/users/login-google

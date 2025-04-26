@@ -1,0 +1,17 @@
+### Creazione di un nuovo alimentatore - ASUS ROG Strix 850W Gold PSU
+POST http://localhost:5050/api/v1/powersupplies
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "ASUS ROG Strix 850W Gold",
+  "brand": "ASUS",
+  "model": "ROG Strix 850G",
+  "wattage": 850,
+  "efficiency": "80+ Gold",
+  "modular": "Full",
+  "formFactor": "ATX",
+  "price": 179.99,
+  "stock": 25,
+  "description": "L'alimentatore ASUS ROG Strix 850W Gold offre prestazioni affidabili con certificazione 80+ Gold per un'elevata efficienza energetica. È completamente modulare per una facile gestione dei cavi, utilizza condensatori giapponesi di alta qualità e dispone di una ventola Axial-tech silenziosa con funzionalità 0dB per un funzionamento silenzioso a carichi ridotti. Design premium con illuminazione ASUS Aura Sync RGB."
+}

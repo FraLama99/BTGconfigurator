@@ -1,0 +1,30 @@
+### Creare una nuova configurazione di macchina
+POST http://localhost:5050/api/v1/machines
+Content-Type: application/json
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "Gaming PC prova",
+  "description": "Configurazione per gaming ad alte prestazioni",
+  "components": {
+    "cpu": "67eef8caa8f393f268029dd1",
+    "motherboard": "67f0de08f0d9288e2c0026ee",
+    "ram":"67f0ef9f1fad5696ae4fa580",
+    "gpu": "67f00a674c7310d1e9f10ffe",
+    "storage": "67f0f2f8e7ffaba742730b97",
+    "powerSupply": "67f0e44f99b7e57e60274687",
+    "case": "67eefea8e63e041096424963",
+    "cooling": "67ef01e1e4d310de478d2296"
+  },
+
+  "status": "saved"
+}
+
+
+### 
+GET http://localhost:5050/api/v1/machines/67f0f9e4e358143a952f9815
+Content-Type: application/json
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+
+

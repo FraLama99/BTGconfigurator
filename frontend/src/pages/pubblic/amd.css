@@ -1,0 +1,70 @@
+.stepButton {
+  font-size: 0.7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+.stepIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  transition: transform 0.2s;
+}
+.activeStep {
+  transform: scale(1.05);
+}
+:root {
+  --amd-primary: #dc3545;
+  --amd-secondary: #fd7e14;
+  --amd-gradient: linear-gradient(135deg, #dc3545, #fd7e14);
+}
+
+.amd-theme .progress-bar {
+  background: var(--amd-gradient) !important;
+}
+
+.amd-theme .btn-outline-danger:hover {
+  background-color: var(--amd-primary);
+  border-color: var(--amd-primary);
+}
+
+.amd-theme .price-highlight {
+  color: var(--amd-primary);
+}
+
+.amd-theme .component-card.selected {
+  border-color: var(--amd-primary);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
+}
+
+/* Stili per i badge di disponibilità */
+.component-card .availability-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.component-card .stock-badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Evidenzia i componenti non disponibili */
+.component-card.unavailable {
+  border-color: #ffc107;
+}
+
+.component-card.unavailable .component-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 193, 7, 0.1);
+  pointer-events: none;
+}

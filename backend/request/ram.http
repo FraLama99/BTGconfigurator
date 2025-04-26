@@ -1,0 +1,21 @@
+### Creazione di un nuovo modulo di memoria - Corsair VENGEANCE RGB 128GB DDR5
+POST http://localhost:5050/api/v1/rams
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "CORSAIR VENGEANCE RGB 128GB DDR5-5600",
+  "brand": "Corsair",
+  "model": "VENGEANCE RGB",
+  "sku": "CMH128GX5M4B5600C40",
+  "type": "DDR5",
+  "capacity": 128,
+  "speed": 5600,
+  "casLatency": 40,
+  "voltage": 1.25,
+  "hasRGB": true,
+  "kitSize": 4,
+  "price": 499.99,
+  "stock": 10,
+  "description": "Il kit di memoria CORSAIR VENGEANCE RGB DDR5 offre prestazioni straordinarie con una frequenza di 5600MT/s e una latenza CL40. Ogni modulo da 32GB è dotato di illuminazione RGB dinamica personalizzabile attraverso il software CORSAIR iCUE. Progettato per le ultime piattaforme Intel e AMD, questo kit garantisce una compatibilità eccellente con le schede madri più recenti. La tecnologia di raffreddamento integrata assicura stabilità anche sotto carichi intensi."
+}

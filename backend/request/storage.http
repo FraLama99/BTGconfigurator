@@ -1,0 +1,20 @@
+### Creare un nuovo storage - Corsair MP600 PRO LPX 8TB M.2 NVMe PCIe Gen4 SSD
+POST http://localhost:5050/api/v1/storages
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "Corsair MP600 PRO LPX 8TB",
+  "brand": "Corsair",
+  "model": "MP600 PRO LPX",
+  "type": "NVMe",
+  "capacity": 8000,
+  "formFactor": "M.2",
+  "interface": "PCIe x4 Gen4",
+  "readSpeed": 7100,
+  "writeSpeed": 6800,
+  "cache": 512,
+  "price": 899.99,
+  "stock": 10,
+  "description": "Corsair MP600 PRO LPX Gen4 PCIe x4 NVMe M.2 SSD da 8 TB con velocità di lettura sequenziale fino a 7.100 MB/s e velocità di scrittura fino a 6.800 MB/s. Ideale per PC da gaming e workstation ad alte prestazioni. Include dissipatore a profilo basso compatibile con PS5."
+}

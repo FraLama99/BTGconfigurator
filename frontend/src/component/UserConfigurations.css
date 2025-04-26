@@ -1,0 +1,22 @@
+.config-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.config-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.config-actions {
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.config-card:hover .config-actions {
+  opacity: 1;
+}
+
+.component-list {
+  max-height: 200px;
+  overflow-y: auto;
+}

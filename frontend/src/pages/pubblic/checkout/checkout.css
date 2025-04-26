@@ -1,0 +1,112 @@
+.checkout-page {
+  min-height: 100vh;
+}
+
+.checkout-table th,
+.checkout-table td {
+  vertical-align: middle;
+}
+
+.checkout-table {
+  border-bottom: 1px solid #444;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.remove-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.remove-btn:hover {
+  background-color: #dc3545;
+  color: white;
+  transform: scale(1.1);
+}
+
+.order-summary {
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.1);
+}
+
+.order-btn {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  font-weight: 500;
+}
+
+.order-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.payment-method-option {
+  display: flex;
+  align-items: center;
+}
+
+.payment-radio {
+  cursor: pointer;
+}
+
+.payment-icons {
+  display: flex;
+  align-items: center;
+}
+
+.security-badges {
+  padding-top: 15px;
+  border-top: 1px solid #444;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+/* Styling per gli alert */
+.alert-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+
+.alert-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.credit-card-section {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

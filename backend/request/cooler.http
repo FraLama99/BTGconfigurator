@@ -1,0 +1,20 @@
+### Crea nuovo cooler Corsair iCUE LINK H170i RGB
+POST http://localhost:5050/api/v1/coolers
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzcxMzk4MCwiZXhwIjoxNzQzODAwMzgwfQ.G0iKXiWeHnsgxfMboArHd_AM7XyCgtrP_PWW2AbuaXg
+
+{
+  "name": "Corsair iCUE LINK H170i RGB",
+  "brand": "Corsair",
+  "model": "iCUE LINK H170i RGB",
+  "type": "AIO Liquid",
+  "radiatorSize": 420,
+  "fanSize": 140,
+  "fanCount": 3,
+  "rgb": true,
+  "supportedSockets": ["LGA1700", "LGA1200", "LGA115x", "AM4", "AM5"],
+  "tdpRating": 300,
+  "price": 249.99,
+  "stock": 10,
+  "description": "Sistema di raffreddamento a liquido premium con radiatore da 420mm. Dotato di 3 ventole RGB da 140mm e compatibile con la maggior parte delle CPU moderne. Offre alte prestazioni di raffreddamento e illuminazione RGB personalizzabile tramite software iCUE."
+}

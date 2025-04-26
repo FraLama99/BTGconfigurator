@@ -1,0 +1,30 @@
+### Creazione di una nuova Scheda Madre - ASUS ROG MAXIMUS Z690 HERO
+POST http://localhost:5050/api/v1/motherboards
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0MzgzODY1NywiZXhwIjoxNzQzOTI1MDU3fQ.umkacbQ9oeelNySJYaBiT90bHs8Rm3ET229BkpAwEqY
+
+{
+  "name": "ASUS ROG MAXIMUS Z690 HERO",
+  "brand": "ASUS",
+  "model": "ROG MAXIMUS Z690 HERO",
+  "socket": "LGA1700",
+  "chipset": "Intel Z690",
+  "formFactor": "ATX",
+  "memoryType": "DDR5",
+  "memorySlots": 4,
+  "maxMemory": 128,
+  "pcie_x16": 2,
+  "pcie_x8": 1,
+  "pcie_x4": 0,
+  "pcie_x1": 1,
+  "sataConnectors": 6,
+  "m2Slots": 5,
+  "usb2": 4,
+  "usb3": 8,
+  "typeC": 2,
+  "wifiIncluded": true,
+  "bluetoothIncluded": true,
+  "price": 649.99,
+  "stock": 15,
+  "description": "La scheda madre ROG Maximus Z690 Hero è progettata per i processori Intel Core di 12a generazione, offrendo prestazioni eccezionali e un'ampia gamma di funzionalità per overclocking e gaming. Supporta memorie DDR5, PCIe 5.0, Wi-Fi 6E e USB 3.2 Gen 2x2 Type-C. Include anche illuminazione Aura Sync RGB, tecnologia di raffreddamento avanzata e soluzioni audio di alta qualità."
+}

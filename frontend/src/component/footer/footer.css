@@ -1,0 +1,39 @@
+.footer {
+  margin-top: auto;
+}
+
+.footer h5 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.disclaimer {
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  border-left: 4px solid #ffc107;
+}
+
+.author {
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.social-links li {
+  margin-bottom: 8px;
+}
+
+.social-links a {
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.social-links a:hover {
+  opacity: 0.8;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}

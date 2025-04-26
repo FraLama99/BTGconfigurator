@@ -1,0 +1,23 @@
+### Creazione di una nuova GPU - NVIDIA RTX 5090 Founders Edition
+POST http://localhost:5050/api/v1/gpus
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWVkYjM1ZGI0N2ZlZDc1NDk3NGU4YyIsImlhdCI6MTc0Mzc4MzkxNywiZXhwIjoxNzQzODcwMzE3fQ.hfx8HG3lA_iM20YGQwuzukXKMSP5lvAhaK3I3lZ1YlY
+
+{
+  "name": "NVIDIA GeForce RTX 5090 Founders Edition",
+  "brand": "NVIDIA",
+  "model": "RTX 5090 FE",
+  "chipset": "NVIDIA RTX 5090",
+  "vram": 32,
+  "vramType": "GDDR7",
+  "coreClock": 2650,
+  "boostClock": 3200,
+  "length": 336,
+  "tdp": 600,
+  "powerConnectors": "2x 12-pin",
+  "displayPorts": 3,
+  "hdmiPorts": 2,
+  "price": 2499.99,
+  "stock": 10,
+  "description": "La nuova ammiraglia NVIDIA RTX 5090 offre prestazioni senza precedenti per gaming e creazione di contenuti. Dotata della nuova architettura Ada Lovelace di ultima generazione, 32GB di memoria GDDR7 e tecnologie avanzate di ray tracing e IA."
+}

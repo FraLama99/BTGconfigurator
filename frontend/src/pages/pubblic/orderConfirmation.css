@@ -1,0 +1,32 @@
+.order-confirmation-page {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.order-confirmation-page .bi-check-circle-fill {
+  color: #90ee90;
+}
+
+.steps-list {
+  list-style-type: none;
+  padding-left: 0.5rem;
+}
+
+.steps-list li {
+  padding: 0.5rem 0;
+}
+
+.component-list li {
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+/* Animazione pulsante home */
+.order-confirmation-page .btn-warning {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.order-confirmation-page .btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+}

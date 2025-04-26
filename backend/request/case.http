@@ -1,0 +1,22 @@
+### Crea case senza immagine
+POST http://localhost:5050/api/v1/cases
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZjU4YzlkZDIxMmM5MDg5NGEwMzg4ZiIsImlhdCI6MTc0NDIxNjEyNywiZXhwIjoxNzQ0MzAyNTI3fQ.k-gi5SerX-KooZTdwCT-DGMkyGFCBdORhu2WbdmH3hw
+
+{
+  "name": "ROG Hyperion EVA-02 Edition",
+  "brand": "ASUS",
+  "model": "Hyperion EVA-02",
+  "formFactor": "E-ATX",
+  "height": 626,
+  "width": 266,
+  "depth": 626,
+  "maxGpuLength": 460,
+  "maxCpuCoolerHeight": 190,
+  "includedFans": 3,
+  "panelType": "Tempered Glass",
+  "rgb": true,
+  "price": 629.99,
+  "stock": 5,
+  "description": "Case ASUS ROG Hyperion in edizione speciale EVA-02. Case full-tower premium con supporto per schede madri E-ATX, design ispirato alla serie Evangelion, illuminazione RGB personalizzabile e eccellente gestione del flusso d'aria."
+}

@@ -1,0 +1,73 @@
+.machine-detail-page {
+  min-height: 100vh;
+}
+
+.machine-image-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.machine-image {
+  transition: transform 0.3s;
+}
+
+.machine-image:hover {
+  transform: scale(1.03);
+}
+
+/* Custom tabs styling */
+.custom-tabs .nav-link {
+  color: #f8f9fa;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background-color: transparent;
+}
+
+.custom-tabs .nav-link:hover {
+  border-color: #ffc107;
+}
+
+.custom-tabs .nav-link.active {
+  color: #ffc107;
+  border-color: #ffc107;
+  background-color: transparent;
+}
+
+/* Table styling */
+.component-table tr {
+  transition: background-color 0.2s;
+}
+
+.component-table tr:hover {
+  background-color: #2a2a2a !important;
+}
+
+/* Progress bars */
+.game-performance .progress {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.specs-list .list-group-item {
+  transition: background-color 0.2s;
+}
+
+.specs-list .list-group-item:hover {
+  background-color: #2a2a2a !important;
+}
+
+.action-buttons .btn {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.action-buttons .btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Badge styling */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
