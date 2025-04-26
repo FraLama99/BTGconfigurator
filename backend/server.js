@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 app.use(cors({
     origin: ['http://localhost:3000',
-        '',
+        'https://btgconfigurator.onrender.com',
         ''],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
