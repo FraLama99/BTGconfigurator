@@ -1,3 +1,13 @@
+# indicazioni per runner da locale:
+
+## arpi due terminali, entra con tutti e due in BTGconfigurator, in uno backend e latro frontend.
+
+### nel backend lancia un install e poi scrivi npm run dev, mentre nel frontend installa i pacchetti già presenti nei package e poi scrivi npm start.
+
+### ricordati di compilare il file .env come dersritto nel esempio.
+
+# Link di riferimento per provare l'applicativo lato cliente : https://bt-gconfigurator.vercel.app
+
 # 🖥️ BTG System Configurator 🛠️
 
 Configuratore e shop esame finale BTGSYS per epicode
