@@ -17,7 +17,8 @@ import { useAuth } from "../../utlis/AuthContext";
 import api from "../../utlis/api";
 import { useNavigate } from "react-router-dom";
 import { BsPersonCircle } from "react-icons/bs";
-import UserConfigurations from "../../component/UserConfigurations";
+
+import MyConfiguration from "./myconfiguration";
 
 const Profile = () => {
   const {
@@ -544,12 +545,6 @@ const Profile = () => {
             </Card.Body>
           </Card>
 
-          {/* Sezione configurazioni - Ora importata come componente separato */}
-          <UserConfigurations
-            userId={user?._id}
-            onUpdate={() => fetchUserData()}
-          />
-
           {/* Sezione ordini */}
           <Card className="mt-4 mb-5 shadow-sm">
             <Card.Header className="bg-dark text-light">
@@ -603,6 +598,18 @@ const Profile = () => {
                             >
                               Dettagli
                             </Button>
+                            <Button
+                              size="sm"
+                              variant="outline-primary"
+                              onClick={() => {
+                                window.open(
+                                  `/print/order/${order._id}`,
+                                  "_blank"
+                                );
+                              }}
+                            >
+                              Visualizza e stampa
+                            </Button>
                           </td>
                         </tr>
                       ))}
@@ -623,6 +630,11 @@ const Profile = () => {
               )}
             </Card.Body>
           </Card>
+
+          <MyConfiguration
+            userId={user?._id}
+            onUpdate={() => fetchUserData()}
+          />
 
           {/* Modal di reset password */}
           <Modal
