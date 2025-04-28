@@ -311,6 +311,10 @@ export const checkComponentsAvailability = async (components) => {
     try {
         const checkPromises = [];
         const unavailableComponents = [];
+        const incompatibilities = [];
+
+        // Prima recuperiamo tutti i componenti necessari
+        const componentsData = {};
 
         // Verifica ogni componente, se è richiesto
         if (components.cpu && components.cpu.id) {
@@ -323,6 +327,9 @@ export const checkComponentsAvailability = async (components) => {
                             name: components.cpu.name,
                             available: component ? component.stock : 0
                         });
+                    }
+                    if (component) {
+                        componentsData.cpu = component;
                     }
                     return component;
                 })
@@ -340,6 +347,9 @@ export const checkComponentsAvailability = async (components) => {
                             available: component ? component.stock : 0
                         });
                     }
+                    if (component) {
+                        componentsData.motherboard = component;
+                    }
                     return component;
                 })
             );
@@ -356,6 +366,9 @@ export const checkComponentsAvailability = async (components) => {
                             available: component ? component.stock : 0
                         });
                     }
+                    if (component) {
+                        componentsData.ram = component;
+                    }
                     return component;
                 })
             );
@@ -371,6 +384,9 @@ export const checkComponentsAvailability = async (components) => {
                             name: components.gpu.name,
                             available: component ? component.stock : 0
                         });
+                    }
+                    if (component) {
+                        componentsData.gpu = component;
                     }
                     return component;
                 })
@@ -389,6 +405,9 @@ export const checkComponentsAvailability = async (components) => {
                             available: component ? component.stock : 0
                         });
                     }
+                    if (component) {
+                        componentsData.storage = component;
+                    }
                     return component;
                 })
             );
@@ -404,6 +423,9 @@ export const checkComponentsAvailability = async (components) => {
                             name: components.powerSupply.name,
                             available: component ? component.stock : 0
                         });
+                    }
+                    if (component) {
+                        componentsData.powerSupply = component;
                     }
                     return component;
                 })
@@ -421,6 +443,9 @@ export const checkComponentsAvailability = async (components) => {
                             available: component ? component.stock : 0
                         });
                     }
+                    if (component) {
+                        componentsData.case = component;
+                    }
                     return component;
                 })
             );
@@ -437,19 +462,46 @@ export const checkComponentsAvailability = async (components) => {
                             available: component ? component.stock : 0
                         });
                     }
+                    if (component) {
+                        componentsData.cooling = component;
+                    }
                     return component;
                 })
             );
         }
 
-
-
-
         await Promise.all(checkPromises);
+
+        // Verifica di compatibilità tra RAM e Motherboard
+        if (componentsData.ram && componentsData.motherboard) {
+            // Verifica compatibilità memoryType
+            if (componentsData.ram.memoryType !== componentsData.motherboard.memoryType) {
+                incompatibilities.push({
+                    type: 'MemoryType',
+                    components: [
+                        {
+                            type: 'RAM',
+                            id: componentsData.ram._id,
+                            name: componentsData.ram.name,
+                            detail: `Tipo di memoria: ${componentsData.ram.memoryType}`
+                        },
+                        {
+                            type: 'Motherboard',
+                            id: componentsData.motherboard._id,
+                            name: componentsData.motherboard.name,
+                            detail: `Tipo di memoria supportato: ${componentsData.motherboard.memoryType}`
+                        }
+                    ],
+                    message: `Incompatibilità: RAM ${componentsData.ram.memoryType} non compatibile con scheda madre che supporta ${componentsData.motherboard.memoryType}`
+                });
+            }
+        }
 
         return {
             allAvailable: unavailableComponents.length === 0,
-            unavailableComponents
+            unavailableComponents,
+            compatible: incompatibilities.length === 0,
+            incompatibilities
         };
     } catch (error) {
         console.error('❌ Errore nella verifica della disponibilità:', error);

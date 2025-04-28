@@ -11,7 +11,7 @@ const caseSchema = new mongoose.Schema({
             values: [
                 'E-ATX', 'ATX', 'Micro-ATX', 'Mini-ITX',
                 'Nano-ITX', 'XL-ATX', 'EATX', 'EEATX',
-                'SSI-CEB', 'SSI-EEB', 'Mini-STX'
+                'SSI-CEB', 'SSI-EEB', 'Mini-STX', 'CEB'
             ],
             message: '{VALUE} non è un formato supportato'
         },

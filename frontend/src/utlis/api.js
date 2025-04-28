@@ -260,9 +260,7 @@ const api = {
     updateCPU: (id, data) => axios.put(`/cpus/${id}`, data, {
         headers: { 'Content-Type': 'application/json' }
     }),
-    updateCPUImage: (id, imageFile) => {
-        const formData = new FormData();
-        formData.append('image', imageFile);
+    updateCPUImage: (id, formData) => {
         return axios.patch(`/cpus/${id}/image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
@@ -294,9 +292,8 @@ const api = {
     updateCooler: (id, data) => axios.put(`/coolers/${id}`, data, {
         headers: { 'Content-Type': 'application/json' }
     }),
-    updateCoolerImage: (id, imageFile) => {
-        const formData = new FormData();
-        formData.append('image', imageFile);
+    updateCoolerImage: (id, formData) => {
+
         return axios.patch(`/coolers/${id}/image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
@@ -311,11 +308,11 @@ const api = {
     updateGPU: (id, data) => axios.put(`/gpus/${id}`, data, {
         headers: { 'Content-Type': 'application/json' }
     }),
-    updateGPUImage: (id, imageFile) => {
-        const formData = new FormData();
-        formData.append('image', imageFile);
+    updateGPUImage: (id, formData) => {
         return axios.patch(`/gpus/${id}/image`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         });
     },
     deleteGPU: (id) => axios.delete(`/gpus/${id}`),
@@ -328,9 +325,7 @@ const api = {
     updateMotherboard: (id, data) => axios.put(`/motherboards/${id}`, data, {
         headers: { 'Content-Type': 'application/json' }
     }),
-    updateMotherboardImage: (id, imageFile) => {
-        const formData = new FormData();
-        formData.append('image', imageFile);
+    updateMotherboardImage: (id, formData) => {
         return axios.patch(`/motherboards/${id}/image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
@@ -345,12 +340,9 @@ const api = {
     updatePowerSupply: (id, data) => axios.put(`/powersupplies/${id}`, data, {
         headers: { 'Content-Type': 'application/json' }
     }),
-    updatePowerSupplyImage: (id, imageFile) => {
-        const formData = new FormData();
-        formData.append('image', imageFile);
-        return axios.patch(`/powersupplies/${id}/image`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
+    updatePowerSupplyImage: (id, formData) => {
+        // Rimuovi gli headers e lascia che Axios gestisca il Content-Type automaticamente
+        return axios.patch(`/powersupplies/${id}/image`, formData);
     },
     deletePowerSupply: (id) => axios.delete(`/powersupplies/${id}`),
 
@@ -379,9 +371,8 @@ const api = {
     updateStorage: (id, data) => axios.put(`/storages/${id}`, data, {
         headers: { 'Content-Type': 'application/json' }
     }),
-    updateStorageImage: (id, imageFile) => {
-        const formData = new FormData();
-        formData.append('image', imageFile);
+    updateStorageImage: (id, formData) => {
+
         return axios.patch(`/storages/${id}/image`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });

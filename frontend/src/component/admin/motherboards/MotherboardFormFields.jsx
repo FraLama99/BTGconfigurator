@@ -81,6 +81,7 @@ const MotherboardFormFields = ({ data, handleChange, isEditing = false }) => {
               <option value="ATX">ATX</option>
               <option value="Micro-ATX">Micro-ATX</option>
               <option value="Mini-ITX">Mini-ITX</option>
+              <option value="CEB">CEB</option>
               <option value="E-ATX">E-ATX</option>
             </Form.Select>
           </Form.Group>

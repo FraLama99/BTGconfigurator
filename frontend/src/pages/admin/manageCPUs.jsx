@@ -59,23 +59,65 @@ const ManageCPUs = () => {
       setLoading(true);
       setError(null);
 
-      const formDataToSend = new FormData();
-      Object.keys(formData).forEach((key) => {
-        formDataToSend.append(key, formData[key]);
-      });
+      // 1. Prima crea la CPU con i dati di base
+      const cpuData = { ...formData };
 
-      if (image) {
-        formDataToSend.append("image", image);
+      // Converti valori numerici se necessario
+      if (cpuData.price) cpuData.price = Number(cpuData.price);
+      if (cpuData.tdp) cpuData.tdp = Number(cpuData.tdp);
+      if (cpuData.cores) cpuData.cores = Number(cpuData.cores);
+      if (cpuData.threads) cpuData.threads = Number(cpuData.threads);
+      if (cpuData.baseClock) cpuData.baseClock = Number(cpuData.baseClock);
+      if (cpuData.boostClock) cpuData.boostClock = Number(cpuData.boostClock);
+      if (cpuData.stock) cpuData.stock = Number(cpuData.stock);
+
+      // Crea la CPU senza l'immagine
+      const response = await api.createCPU(cpuData);
+      const newCpuId = response.data._id;
+
+      // 2. Poi, se c'è un'immagine, caricala separatamente
+      let imageUploadError = null;
+      if (image && image instanceof File) {
+        try {
+          const formData = new FormData();
+          formData.append("image", image);
+
+          console.log(
+            "Tentativo di caricamento immagine per nuova CPU:",
+            image.name
+          );
+
+          // API specifica per caricare solo l'immagine
+          await api.updateCPUImage(newCpuId, formData);
+        } catch (imageError) {
+          console.error(
+            "Errore nel caricamento dell'immagine per nuova CPU:",
+            imageError
+          );
+          imageUploadError =
+            "La CPU è stata creata, ma l'immagine non è stata caricata. " +
+            (imageError.response?.data?.message ||
+              "Verifica il formato e la dimensione.");
+        }
       }
 
-      await api.createCPU(formDataToSend);
+      if (imageUploadError) {
+        setSuccess(
+          "CPU creata con successo, ma c'è stato un problema con l'immagine."
+        );
+        setError(imageUploadError);
+      } else {
+        setSuccess("CPU creata con successo!");
+      }
 
-      setSuccess("CPU creata con successo!");
       fetchCPUs();
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
       console.error("Errore nella creazione della CPU:", error);
-      setError("Errore nella creazione della CPU. Verifica i dati e riprova.");
+      setError(
+        "Errore nella creazione della CPU: " +
+          (error.response?.data?.message || "Verifica i dati e riprova.")
+      );
     } finally {
       setLoading(false);
     }
@@ -114,37 +156,81 @@ const ManageCPUs = () => {
       setLoading(true);
       setError(null);
 
-      const formDataToSend = new FormData();
+      // 1. Prima aggiorna i dati della CPU (senza l'immagine)
+      const cpuData = { ...editingCpu };
 
-      Object.keys(editingCpu).forEach((key) => {
-        if (
-          ![
-            "_id",
-            "createdAt",
-            "updatedAt",
-            "__v",
-            "newImage",
-            "imagePreview",
-          ].includes(key)
-        ) {
-          formDataToSend.append(key, editingCpu[key]);
+      // Rimuovi i campi che non devono essere inviati
+      const fieldsToRemove = [
+        "_id",
+        "createdAt",
+        "updatedAt",
+        "__v",
+        "newImage",
+        "imagePreview",
+        "image",
+      ];
+      fieldsToRemove.forEach((field) => delete cpuData[field]);
+
+      // Converti valori numerici se necessario
+      if (cpuData.price) cpuData.price = Number(cpuData.price);
+      if (cpuData.tdp) cpuData.tdp = Number(cpuData.tdp);
+      if (cpuData.cores) cpuData.cores = Number(cpuData.cores);
+      if (cpuData.threads) cpuData.threads = Number(cpuData.threads);
+      if (cpuData.baseClock) cpuData.baseClock = Number(cpuData.baseClock);
+      if (cpuData.boostClock) cpuData.boostClock = Number(cpuData.boostClock);
+      if (cpuData.stock) cpuData.stock = Number(cpuData.stock);
+
+      // Effettua l'update dei dati
+      await api.updateCPU(editingCpu._id, cpuData);
+
+      // 2. Poi, se c'è una nuova immagine, gestiscila separatamente
+      let imageUploadError = null;
+      if (editingCpu.newImage && editingCpu.newImage instanceof File) {
+        try {
+          const formData = new FormData();
+          formData.append("image", editingCpu.newImage);
+
+          console.log(
+            "Tentativo di caricamento immagine CPU:",
+            editingCpu.newImage.name,
+            {
+              tipo: editingCpu.newImage.type,
+              dimensione: `${(editingCpu.newImage.size / 1024).toFixed(2)} KB`,
+            }
+          );
+
+          // API specifica per caricare solo l'immagine
+          await api.updateCPUImage(editingCpu._id, formData);
+        } catch (imageError) {
+          console.error(
+            "Errore nel caricamento dell'immagine CPU:",
+            imageError
+          );
+          imageUploadError =
+            "L'immagine della CPU non è stata aggiornata. " +
+            (imageError.response?.data?.message ||
+              "Verifica il formato e la dimensione.");
         }
-      });
-
-      if (editingCpu.newImage) {
-        formDataToSend.append("image", editingCpu.newImage);
       }
 
-      await api.updateCPU(editingCpu._id, formDataToSend);
-
       setShowEditModal(false);
-      setSuccess("CPU aggiornata con successo!");
       fetchCPUs();
+
+      if (imageUploadError) {
+        setSuccess(
+          "CPU aggiornata con successo, ma c'è stato un problema con l'immagine."
+        );
+        setError(imageUploadError);
+      } else {
+        setSuccess("CPU aggiornata con successo!");
+      }
+
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
       console.error("Errore nell'aggiornamento della CPU:", error);
       setError(
-        "Errore nell'aggiornamento della CPU. Verifica i dati e riprova."
+        "Errore nell'aggiornamento della CPU: " +
+          (error.response?.data?.message || "Verifica i dati e riprova.")
       );
     } finally {
       setLoading(false);

@@ -78,13 +78,31 @@ const ManagePowers = () => {
 
       // Crea l'alimentatore
       const response = await api.createPowerSupply(preparedData);
+      console.log("Risposta completa:", response.data);
+
+      // Estrai l'ID corretto dalla risposta
+      const powerId = response.data.powerSupply?._id;
+
+      if (!powerId) {
+        console.error("ID non trovato nella risposta:", response.data);
+        setSuccess("Alimentatore creato ma problema con ID per immagine");
+        fetchPowers();
+        return;
+      }
+
+      console.log("ID alimentatore trovato:", powerId);
 
       // Se c'è un'immagine, caricala separatamente
       if (image) {
-        const powerId = response.data._id || response.data.power._id;
         const formData = new FormData();
         formData.append("image", image);
-        await api.updatePowerSupplyImage(powerId, formData);
+        try {
+          await api.updatePowerSupplyImage(powerId, formData);
+          console.log("Immagine caricata con successo");
+        } catch (imageError) {
+          console.error("Errore caricamento immagine:", imageError);
+          setError("Alimentatore creato, ma problema con l'immagine");
+        }
       }
 
       setSuccess("Alimentatore creato con successo!");
@@ -99,7 +117,6 @@ const ManagePowers = () => {
       setLoading(false);
     }
   };
-
   // Handlers per la modifica
   const handleEditClick = (power) => {
     console.log("Alimentatore originale:", power);
@@ -166,11 +183,6 @@ const ManagePowers = () => {
         return;
       }
 
-      console.log(
-        "Dati dell'alimentatore prima della preparazione:",
-        editingPower
-      );
-
       // Prepara i dati per il backend
       const preparedData = prepareDataForBackend(editingPower);
       console.log(
@@ -201,7 +213,6 @@ const ManagePowers = () => {
       setLoading(false);
     }
   };
-
   // Handlers per l'eliminazione
   const handleDeleteClick = (power) => {
     setDeletingPower(power);

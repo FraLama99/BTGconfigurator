@@ -65,15 +65,31 @@ const ManageMotherboards = () => {
 
       // Prepara i dati per il backend
       const preparedData = prepareDataForBackend(formData);
+      console.log(
+        "Dati della scheda madre preparati per il backend:",
+        preparedData
+      );
 
       // Crea la scheda madre
       const response = await api.createMotherboard(preparedData);
 
-      // Se c'è un'immagine, caricala
-      if (image) {
-        const motherboardId =
-          response.data._id || response.data.motherboard._id;
-        await api.updateMotherboardImage(motherboardId, image);
+      // Se c'è un'immagine, caricala separatamente
+      if (image && image instanceof File) {
+        try {
+          const gpuId = response.data._id || response.data.motherboard._id;
+          const imageFormData = new FormData();
+          imageFormData.append("image", image); // Usa l'immagine passata come parametro, non editingGpu
+
+          console.log("Tentativo di caricamento immagine:", image.name);
+          await api.updateMotherboardImage(gpuId, imageFormData);
+        } catch (imageError) {
+          console.error("Dettagli errore immagine:", imageError);
+          setError(
+            `Scheda madre creata, ma c'è stato un problema con l'immagine: ${
+              imageError.response?.data?.message || imageError.message
+            }`
+          );
+        }
       }
 
       setSuccess("Scheda madre creata con successo!");
@@ -82,7 +98,8 @@ const ManageMotherboards = () => {
     } catch (error) {
       console.error("Errore nella creazione della scheda madre:", error);
       setError(
-        "Errore nella creazione della scheda madre. Verifica i dati e riprova."
+        "Errore nella creazione della scheda madre: " +
+          (error.response?.data?.message || error.message)
       );
     } finally {
       setLoading(false);
@@ -181,51 +198,46 @@ const ManageMotherboards = () => {
       setLoading(true);
       setError(null);
 
-      const dataToSend = {
-        name: editingMotherboard.name,
-        brand: editingMotherboard.brand,
-        model: editingMotherboard.model,
-        socket: editingMotherboard.socket,
-        chipset: editingMotherboard.chipset,
-        formFactor: editingMotherboard.formFactor,
-        memoryType: editingMotherboard.memoryType,
-        memorySlots: Number(editingMotherboard.memorySlots) || 0,
-        maxMemory: Number(editingMotherboard.maxMemory) || 0,
-        sataConnectors: Number(editingMotherboard.sataConnectors) || 0,
-        m2Slots: Number(editingMotherboard.m2Slots) || 0,
-        pcie_x16: Number(editingMotherboard.pciSlots?.pcie_x16) || 0,
-        pcie_x8: Number(editingMotherboard.pciSlots?.pcie_x8) || 0,
-        pcie_x4: Number(editingMotherboard.pciSlots?.pcie_x4) || 0,
-        pcie_x1: Number(editingMotherboard.pciSlots?.pcie_x1) || 0,
-        usb2: Number(editingMotherboard.usbPorts?.usb2) || 0,
-        usb3: Number(editingMotherboard.usbPorts?.usb3) || 0,
-        typeC: Number(editingMotherboard.usbPorts?.typeC) || 0,
-        wifiIncluded: editingMotherboard.wifiIncluded ? "true" : "false",
-        bluetoothIncluded: editingMotherboard.bluetoothIncluded
-          ? "true"
-          : "false",
-        price: Number(editingMotherboard.price) || 0,
-        stock: Number(editingMotherboard.stock) || 0,
-        description: editingMotherboard.description || "",
-      };
+      // Aggiorna dati
+      const preparedData = prepareDataForBackend(editingMotherboard);
+      await api.updateMotherboard(editingMotherboard._id, preparedData);
 
-      await api.updateMotherboard(editingMotherboard._id, dataToSend);
+      // Gestisci immagine separatamente
+      if (
+        editingMotherboard.newImage &&
+        editingMotherboard.newImage instanceof File
+      ) {
+        try {
+          const formData = new FormData();
+          formData.append("image", editingMotherboard.newImage);
 
-      if (editingMotherboard.newImage) {
-        await api.updateMotherboardImage(
-          editingMotherboard._id,
-          editingMotherboard.newImage
-        );
+          // Log per debug
+          console.log(
+            `Caricamento immagine: ${editingMotherboard.newImage.name}, tipo: ${editingMotherboard.newImage.type}, dimensione: ${editingMotherboard.newImage.size} bytes`
+          );
+
+          // NON impostare manualmente il Content-Type nell'API call
+          await api.updateMotherboardImage(editingMotherboard._id, formData);
+        } catch (imageError) {
+          console.error("Errore immagine dettagliato:", imageError);
+          setError(
+            `Scheda madre aggiornata, ma problema con l'immagine: ${
+              imageError.response?.data?.message || imageError.message
+            }`
+          );
+        }
       }
 
       setShowEditModal(false);
-      setSuccess("Scheda madre aggiornata con successo!");
       fetchMotherboards();
+      setSuccess("Scheda madre aggiornata con successo!");
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
       console.error("Errore nell'aggiornamento della scheda madre:", error);
       setError(
-        "Errore nell'aggiornamento della scheda madre. Verifica i dati e riprova."
+        `Errore nell'aggiornamento: ${
+          error.response?.data?.message || error.message
+        }`
       );
     } finally {
       setLoading(false);

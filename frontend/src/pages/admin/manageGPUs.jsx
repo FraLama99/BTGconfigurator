@@ -86,7 +86,7 @@ const ManageGPUs = () => {
       if (image) {
         const gpuId = response.data._id || response.data.gpu._id;
         const formData = new FormData();
-        formData.append("image", image);
+        formData.append("image", editingGpu.newImage);
         await api.updateGPUImage(gpuId, formData);
       }
 
@@ -173,33 +173,54 @@ const ManageGPUs = () => {
         return;
       }
 
-      console.log("Dati della GPU prima della preparazione:", editingGpu);
-
-      // Prepara i dati per il backend
+      // Prepara i dati per il backend (esclusa l'immagine)
       const preparedData = prepareDataForBackend(editingGpu);
       console.log(
         "Dati della GPU preparati per l'aggiornamento:",
         preparedData
       );
 
-      // Aggiorna la GPU
+      // Aggiorna prima i dati della GPU
       await api.updateGPU(editingGpu._id, preparedData);
 
-      // Se c'è una nuova immagine, caricala separatamente
-      if (editingGpu.newImage) {
-        const formData = new FormData();
-        formData.append("image", editingGpu.newImage);
-        await api.updateGPUImage(editingGpu._id, formData);
+      // Poi, se c'è una nuova immagine, gestiscila separatamente
+      let imageUploadError = null;
+      if (editingGpu.newImage && editingGpu.newImage instanceof File) {
+        try {
+          const formData = new FormData();
+          formData.append("image", editingGpu.newImage);
+          console.log(
+            "Tentativo di caricamento immagine:",
+            editingGpu.newImage.name
+          );
+          await api.updateGPUImage(editingGpu._id, formData);
+        } catch (imageError) {
+          console.error("Errore nel caricamento dell'immagine:", imageError);
+          imageUploadError =
+            "L'immagine non è stata aggiornata. " +
+            (imageError.response?.data?.message ||
+              "Verifica il formato e la dimensione.");
+        }
       }
 
       setShowEditModal(false);
-      setSuccess("GPU aggiornata con successo!");
       fetchGPUs();
+
+      if (imageUploadError) {
+        setSuccess(
+          "GPU aggiornata con successo, ma c'è stato un problema con l'immagine."
+        );
+        setError(imageUploadError);
+      } else {
+        setSuccess("GPU aggiornata con successo!");
+      }
+
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
       console.error("Errore nell'aggiornamento della GPU:", error);
       setError(
-        "Errore nell'aggiornamento della GPU. Verifica i dati e riprova."
+        "Errore nell'aggiornamento della GPU: " +
+          (error.response?.data?.message || "Verifica i dati e riprova.")
       );
     } finally {
       setLoading(false);

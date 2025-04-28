@@ -30,6 +30,7 @@ const EditGPUModal = ({
                   type="file"
                   accept="image/*"
                   onChange={onImageChange}
+                  name="image"
                 />
                 <Form.Text className="text-muted">
                   Lascia vuoto per mantenere l'immagine attuale

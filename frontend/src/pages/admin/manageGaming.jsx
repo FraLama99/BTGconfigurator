@@ -536,6 +536,16 @@ const ManageGaming = () => {
     }
   };
 
+  // Nel componente PresetAdd.jsx
+
+  // Aggiungi questa funzione
+  const updateFilteredComponents = (componentType, filteredList) => {
+    setFilteredComponents((prev) => ({
+      ...prev,
+      [componentType]: filteredList,
+    }));
+  };
+
   if (authLoading) {
     return (
       <div
@@ -610,6 +620,7 @@ const ManageGaming = () => {
                       updateSelectedComponents={updateSelectedComponents}
                       calculateBasePrice={calculateBasePrice}
                       incompatibilityWarnings={incompatibilityWarnings}
+                      updateFilteredComponents={updateFilteredComponents}
                     />
                   </Col>
                 )}

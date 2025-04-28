@@ -36,22 +36,31 @@ export const loadMotherboards = async (config, cpus, setLoading, setError, setMo
         setLoading(false);
     }
 };
-
 export const loadRams = async (config, motherboards, setLoading, setError, setRams) => {
     if (!config.motherboard) return;
 
     setLoading(true);
     try {
+        // Trova la scheda madre selezionata
         const selectedMb = motherboards.find((m) => m._id === config.motherboard);
+
         if (selectedMb) {
+            console.log("Filtro RAM per tipo di memoria:", selectedMb.memoryType);
+
+            // Recupera solo le RAM compatibili con il tipo di memoria della scheda madre selezionata
             const response = await api.getRAMs({
-                type: selectedMb.ramType,
+                memoryType: selectedMb.memoryType // Filtra per il tipo di memoria della scheda madre
             });
+
+            console.log(`Caricate ${response.data.length} RAM di tipo ${selectedMb.memoryType}`);
             setRams(response.data);
+        } else {
+            console.error("Scheda madre selezionata non trovata nei dati disponibili");
+            setRams([]);
         }
     } catch (err) {
+        console.error("Errore durante il caricamento delle RAM compatibili:", err);
         setError("Errore durante il caricamento delle RAM compatibili");
-        console.error(err);
     } finally {
         setLoading(false);
     }

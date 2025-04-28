@@ -8,6 +8,7 @@ import {
   Spinner,
   Accordion,
 } from "react-bootstrap";
+import { loadRams } from "../../../component/configurator/utils/componentLoaders";
 
 const AddPresetForm = ({
   onSubmit,
@@ -18,7 +19,12 @@ const AddPresetForm = ({
   updateSelectedComponents,
   calculateBasePrice,
   incompatibilityWarnings,
+  updateFilteredComponents, // Aggiungi questa prop
 }) => {
+  // Stati per gestire caricamento e errori per loadRams
+  const [ramLoading, setRamLoading] = useState(false);
+  const [ramError, setRamError] = useState(null);
+
   // Funzione per formattare il prezzo
   const formatPrice = (price) => {
     return Number(price).toFixed(2);
@@ -180,6 +186,56 @@ const AddPresetForm = ({
       });
   };
 
+  // Correggi l'useEffect per loadRams
+  useEffect(() => {
+    // Se c'è una scheda madre selezionata, carica le RAM compatibili
+    if (selectedComponents.motherboard) {
+      console.log("Scheda madre cambiata, caricamento RAM compatibili");
+
+      // Prepara la configurazione per loadRams
+      const config = {
+        motherboard: selectedComponents.motherboard._id,
+      };
+
+      // Aggiungi un controllo per evitare chiamate inutili
+      const currentMemoryType = selectedComponents.motherboard.memoryType;
+
+      // Verifica se dobbiamo effettivamente aggiornare le RAM o sono già filtrate correttamente
+      const currentRamsMemoryType =
+        filteredComponents.rams.length > 0
+          ? filteredComponents.rams[0].memoryType
+          : null;
+
+      // Se le RAM sono già filtrate per questo tipo di memoria, evitiamo di chiamare loadRams
+      if (currentRamsMemoryType === currentMemoryType) {
+        console.log(
+          "RAM già filtrate per il tipo di memoria corretto:",
+          currentMemoryType
+        );
+        return;
+      }
+
+      console.log("Filtraggio RAM per tipo di memoria:", currentMemoryType);
+
+      // Ora chiamiamo loadRams solo se necessario
+      setRamLoading(true);
+      loadRams(
+        config,
+        components.motherboards,
+        setRamLoading,
+        setRamError,
+        (ramsData) => {
+          updateFilteredComponents("rams", ramsData);
+          console.log(`Caricate ${ramsData.length} RAM compatibili`);
+        }
+      );
+    }
+  }, [
+    selectedComponents.motherboard,
+    // Rimuovi components.motherboards e updateFilteredComponents dalla dipendenza
+    // per ridurre il numero di volte che l'effect viene eseguito
+  ]);
+
   return (
     <Form onSubmit={handleSubmit}>
       <Row className="mb-4">
@@ -334,6 +390,31 @@ const AddPresetForm = ({
           </Accordion.Header>
           <Accordion.Body>
             <Form.Group>
+              {selectedComponents.motherboard &&
+                filteredComponents.rams.length > 0 && (
+                  <Alert variant="info" className="p-2 mb-2">
+                    <small>
+                      <i className="bi bi-info-circle me-1"></i>
+                      Mostrando solo RAM di tipo{" "}
+                      {selectedComponents.motherboard.memoryType} compatibili
+                      con la scheda madre selezionata
+                    </small>
+                  </Alert>
+                )}
+
+              {selectedComponents.motherboard &&
+                filteredComponents.rams.length === 0 && (
+                  <Alert variant="warning" className="p-2 mb-2">
+                    <small>
+                      <i className="bi bi-exclamation-triangle me-1"></i>
+                      Non ci sono RAM di tipo{" "}
+                      {selectedComponents.motherboard.memoryType} disponibili.
+                      Aggiungi RAM compatibili o seleziona una scheda madre
+                      diversa.
+                    </small>
+                  </Alert>
+                )}
+
               <Form.Control
                 as="select"
                 name="components.ram"
@@ -345,11 +426,13 @@ const AddPresetForm = ({
                 <option value="">Seleziona RAM</option>
                 {filteredComponents.rams.map((ram) => (
                   <option key={ram._id} value={ram._id}>
-                    {ram.brand} {ram.model} {ram.capacity}GB {ram.type}{" "}
+                    {ram.brand} {ram.model} {ram.capacity}GB {ram.memoryType}{" "}
+                    {/* Cambia ram.type a ram.memoryType */}
                     {ram.speed}MHz - €{formatPrice(ram.price)}
                   </option>
                 ))}
               </Form.Control>
+
               {!selectedComponents.motherboard && (
                 <Form.Text className="text-muted">
                   Seleziona prima una scheda madre per vedere le RAM compatibili
@@ -554,6 +637,21 @@ const AddPresetForm = ({
               <li key={index}>{warning}</li>
             ))}
           </ul>
+        </Alert>
+      )}
+
+      {/* Puoi aggiungere un indicatore di caricamento o errore per le RAM */}
+      {ramLoading && (
+        <Alert variant="info" className="mt-2 mb-2">
+          <Spinner animation="border" size="sm" /> Caricamento RAM
+          compatibili...
+        </Alert>
+      )}
+
+      {ramError && (
+        <Alert variant="danger" className="mt-2 mb-2">
+          <i className="bi bi-exclamation-triangle"></i> Errore nel caricamento
+          delle RAM: {ramError}
         </Alert>
       )}
     </Form>
