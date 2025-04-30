@@ -14,11 +14,7 @@ export const AuthProvider = ({ children }) => {
     // Funzione per ottenere i dati dell'utente dal backend
     const fetchUserData = async (token) => {
         try {
-            const response = await axios.get('http://localhost:5050/api/v1/users/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const response = await getCurrentUser(token);
 
             console.log("✅ Dati utente recuperati:", response.data);
             setUserData(response.data);
