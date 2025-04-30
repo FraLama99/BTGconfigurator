@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-
+import api from '../utlis/api.js';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     // Funzione per ottenere i dati dell'utente dal backend
     const fetchUserData = async (token) => {
         try {
-            const response = await getCurrentUser(token);
+            const response = await api.getCurrentUser(token);
 
             console.log("✅ Dati utente recuperati:", response.data);
             setUserData(response.data);
