@@ -39,7 +39,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "both": "react-scripts start nodemon ../backend/server.js",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve":"serve -s build"
   },
   "eslintConfig": {
     "extends": [
