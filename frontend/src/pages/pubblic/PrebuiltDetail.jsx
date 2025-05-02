@@ -47,7 +47,14 @@ const PrebuiltDetail = () => {
         machineData.components &&
         machineData.components.motherboard
       ) {
-        fetchCompatibleRamOptions(machineData.components.motherboard._id);
+        // Se la motherboard ha un _id, utilizziamo quello per ottenere dettagli aggiornati
+        // altrimenti possiamo usare direttamente l'oggetto motherboard
+        if (machineData.components.motherboard._id) {
+          fetchCompatibleRamOptions(machineData.components.motherboard._id);
+        } else {
+          // L'oggetto motherboard è già completo, possiamo procedere senza ID
+          fetchCompatibleRamOptions();
+        }
       } else {
         fetchCompatibleRamOptions();
       }
@@ -80,17 +87,97 @@ const PrebuiltDetail = () => {
   const fetchCompatibleRamOptions = async (motherboardId) => {
     try {
       let response;
+
+      // Prima otteniamo i dettagli della scheda madre per conoscere il suo memoryType
       if (motherboardId) {
-        response = await api.getRAMs({ motherboardId });
-      } else {
-        response = await api.getRAMs();
+        const motherboardResponse = await api.getMotherboardById(motherboardId);
+        const motherboard = motherboardResponse.data;
+
+        console.log("Dettagli scheda madre:", motherboard);
+
+        if (motherboard && motherboard.memoryType) {
+          console.log(
+            "Filtraggio RAM per tipo di memoria:",
+            motherboard.memoryType
+          );
+
+          // Otteniamo tutte le RAM
+          response = await api.getRAMs();
+
+          // Filtriamo manualmente le RAM compatibili
+          const allRams = response.data;
+          const compatibleRams = allRams.filter(
+            (ram) => ram.memoryType === motherboard.memoryType
+          );
+
+          console.log(
+            `Trovate ${compatibleRams.length} RAM compatibili di tipo ${motherboard.memoryType} su ${allRams.length} totali`
+          );
+
+          // Imposta le RAM filtrate
+          setRamOptions(compatibleRams);
+          return;
+        } else {
+          console.warn(
+            "Scheda madre trovata ma senza memoryType specificato:",
+            motherboard
+          );
+        }
+      } else if (
+        machine &&
+        machine.components &&
+        machine.components.motherboard
+      ) {
+        // Se non abbiamo l'ID della scheda madre come parametro ma è disponibile nell'oggetto machine
+        const motherboard = machine.components.motherboard;
+
+        if (motherboard.memoryType) {
+          console.log(
+            "Usando memoryType dalla scheda madre già caricata:",
+            motherboard.memoryType
+          );
+
+          // Otteniamo tutte le RAM
+          response = await api.getRAMs();
+
+          // Filtriamo manualmente
+          const allRams = response.data;
+          const compatibleRams = allRams.filter(
+            (ram) => ram.type === motherboard.memoryType
+          );
+
+          console.log(
+            `Trovate ${compatibleRams.length} RAM compatibili di tipo ${motherboard.memoryType}`
+          );
+
+          // Imposta le RAM filtrate
+          setRamOptions(compatibleRams);
+          return;
+        }
       }
+
+      // Fallback: carica tutte le RAM se non possiamo applicare filtri
+      console.log(
+        "Nessun filtro di compatibilità applicato, caricamento di tutte le RAM"
+      );
+      response = await api.getRAMs();
       setRamOptions(response.data);
     } catch (err) {
       console.error(
         "Errore nel caricamento delle opzioni RAM compatibili",
         err
       );
+      // Gestione dell'errore: carica tutte le RAM disponibili
+      try {
+        const response = await api.getRAMs();
+        setRamOptions(response.data);
+      } catch (fallbackErr) {
+        console.error(
+          "Errore anche nel caricamento di fallback delle RAM",
+          fallbackErr
+        );
+        setRamOptions([]);
+      }
     }
   };
 

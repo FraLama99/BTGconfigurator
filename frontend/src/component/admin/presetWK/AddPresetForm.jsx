@@ -8,6 +8,7 @@ import {
   Spinner,
   Accordion,
 } from "react-bootstrap";
+import { loadRams } from "../../../component/configurator/utils/componentLoaders";
 
 const AddPresetForm = ({
   onSubmit,
@@ -18,11 +19,18 @@ const AddPresetForm = ({
   updateSelectedComponents,
   calculateBasePrice,
   incompatibilityWarnings,
+  updateFilteredComponents,
 }) => {
+  // Stati per gestire caricamento e errori per loadRams
+  const [ramLoading, setRamLoading] = useState(false);
+  const [ramError, setRamError] = useState(null);
+
+  // Funzione per formattare il prezzo
   const formatPrice = (price) => {
     return Number(price).toFixed(2);
   };
 
+  // Stato locale per i componenti selezionati
   const [localSelectedComponents, setLocalSelectedComponents] = useState({
     cpu: null,
     motherboard: null,
@@ -104,10 +112,13 @@ const AddPresetForm = ({
     });
   };
 
+  // MODIFICA CRUCIALE: cambia la firma del metodo handleComponentChange
+  // per corrispondere a quella di presetGaming
   const handleComponentChange = (e) => {
     const { name, value } = e.target;
     const componentType = name.replace("components.", "");
 
+    // Aggiorna il formData
     setFormData({
       ...formData,
       components: {
@@ -118,7 +129,77 @@ const AddPresetForm = ({
 
     // Aggiorna sia lo stato locale che quello del parent
     updateSelectedComponents(componentType, value);
+
+    // Logica di filtraggio specifica per ogni tipo di componente
+    if (componentType === "cpu" && value) {
+      const cpu = components.cpus.find((c) => c._id === value);
+      if (cpu && cpu.socket) {
+        const compatibleMotherboards = components.motherboards.filter(
+          (mb) => mb.socket === cpu.socket
+        );
+        updateFilteredComponents("motherboards", compatibleMotherboards);
+      }
+    } else if (componentType === "motherboard" && value) {
+      const motherboard = components.motherboards.find((m) => m._id === value);
+      if (motherboard) {
+        // Filtra RAM compatibili per tipo di memoria
+        if (motherboard.memoryType) {
+          console.log("Filtraggio RAM per tipo:", motherboard.memoryType);
+          const compatibleRams = components.rams.filter(
+            (ram) => ram.type === motherboard.memoryType
+          );
+          updateFilteredComponents("rams", compatibleRams);
+        }
+      }
+    }
+    // Aggiungi qui altri filtri, se necessario
   };
+
+  // Correggi l'useEffect per loadRams
+  useEffect(() => {
+    // Se c'è una scheda madre selezionata, carica le RAM compatibili
+    if (selectedComponents.motherboard) {
+      console.log("Scheda madre cambiata, caricamento RAM compatibili");
+
+      // Prepara la configurazione per loadRams
+      const config = {
+        motherboard: selectedComponents.motherboard._id,
+      };
+
+      // Aggiungi un controllo per evitare chiamate inutili
+      const currentMemoryType = selectedComponents.motherboard.memoryType;
+
+      // Verifica se dobbiamo effettivamente aggiornare le RAM o sono già filtrate correttamente
+      const currentRamsMemoryType =
+        filteredComponents.rams.length > 0
+          ? filteredComponents.rams[0].memoryType
+          : null;
+
+      // Se le RAM sono già filtrate per questo tipo di memoria, evitiamo di chiamare loadRams
+      if (currentRamsMemoryType === currentMemoryType) {
+        console.log(
+          "RAM già filtrate per il tipo di memoria corretto:",
+          currentMemoryType
+        );
+        return;
+      }
+
+      console.log("Filtraggio RAM per tipo di memoria:", currentMemoryType);
+
+      // Filtriamo le RAM compatibili direttamente
+      const compatibleRams = components.rams.filter(
+        (ram) => ram.memoryType === currentMemoryType
+      );
+
+      updateFilteredComponents("rams", compatibleRams);
+      console.log(`Filtrate ${compatibleRams.length} RAM compatibili`);
+    }
+  }, [
+    selectedComponents.motherboard,
+    components.rams,
+    filteredComponents.rams,
+    updateFilteredComponents,
+  ]);
 
   // Funzione per resettare completamente tutto lo stato
   const resetForm = () => {
@@ -176,8 +257,6 @@ const AddPresetForm = ({
         console.error("Errore durante il salvataggio:", error);
       });
   };
-
-  // Resto del codice invariato...
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -332,6 +411,31 @@ const AddPresetForm = ({
           </Accordion.Header>
           <Accordion.Body>
             <Form.Group>
+              {selectedComponents.motherboard &&
+                filteredComponents.rams.length > 0 && (
+                  <Alert variant="info" className="p-2 mb-2">
+                    <small>
+                      <i className="bi bi-info-circle me-1"></i>
+                      Mostrando solo RAM di tipo{" "}
+                      {selectedComponents.motherboard.memoryType} compatibili
+                      con la scheda madre selezionata
+                    </small>
+                  </Alert>
+                )}
+
+              {selectedComponents.motherboard &&
+                filteredComponents.rams.length === 0 && (
+                  <Alert variant="warning" className="p-2 mb-2">
+                    <small>
+                      <i className="bi bi-exclamation-triangle me-1"></i>
+                      Non ci sono RAM di tipo{" "}
+                      {selectedComponents.motherboard.memoryType} disponibili.
+                      Aggiungi RAM compatibili o seleziona una scheda madre
+                      diversa.
+                    </small>
+                  </Alert>
+                )}
+
               <Form.Control
                 as="select"
                 name="components.ram"
@@ -552,6 +656,21 @@ const AddPresetForm = ({
               <li key={index}>{warning}</li>
             ))}
           </ul>
+        </Alert>
+      )}
+
+      {/* Puoi aggiungere un indicatore di caricamento o errore per le RAM */}
+      {ramLoading && (
+        <Alert variant="info" className="mt-2 mb-2">
+          <Spinner animation="border" size="sm" /> Caricamento RAM
+          compatibili...
+        </Alert>
+      )}
+
+      {ramError && (
+        <Alert variant="danger" className="mt-2 mb-2">
+          <i className="bi bi-exclamation-triangle"></i> Errore nel caricamento
+          delle RAM: {ramError}
         </Alert>
       )}
     </Form>

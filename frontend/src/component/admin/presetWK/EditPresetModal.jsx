@@ -12,7 +12,7 @@ const EditPresetModal = ({
   onSubmit,
   loading,
   incompatibilityWarnings,
-  calculateBasePrice,
+  updateFilteredComponents,
 }) => {
   const [formData, setFormData] = useState(null);
 
@@ -34,20 +34,47 @@ const EditPresetModal = ({
     });
   };
 
-  // Gestisce i cambiamenti nei componenti selezionati
-  const handleComponentChange = (e) => {
-    const { name, value } = e.target;
-    const componentType = name.replace("components.", "");
+  // Modifica la funzione handleComponentChange come in AddPresetForm
+  const handleComponentChange = (componentType, event) => {
+    const componentId = event.target.value;
 
+    // Se il valore è vuoto, deseleziona il componente
+    if (!componentId) {
+      updateSelectedComponents(componentType, null);
+      setFormData({
+        ...formData,
+        components: {
+          ...formData.components,
+          [componentType]: null,
+        },
+      });
+      return;
+    }
+
+    // Aggiorna il componente selezionato
+    updateSelectedComponents(componentType, componentId);
+
+    // Aggiorna il formData
     setFormData({
       ...formData,
       components: {
         ...formData.components,
-        [componentType]: value,
+        [componentType]: componentId,
       },
     });
 
-    updateSelectedComponents(componentType, value);
+    // Applica filtri personalizzati se necessario
+    if (componentType === "cpu" && componentId) {
+      const cpu = components.cpus.find((c) => c._id === componentId);
+      if (cpu && cpu.socket) {
+        const compatibleMotherboards = components.motherboards.filter(
+          (mb) => mb.socket === cpu.socket
+        );
+        updateFilteredComponents("motherboards", compatibleMotherboards);
+      }
+    }
+
+    // Altri filtri specifici come nel caso di AddPresetForm...
   };
 
   // Invia il form di modifica
@@ -171,7 +198,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.cpu"
                       value={formData.components.cpu}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("cpu", e)}
                       required
                     >
                       <option value="">Seleziona CPU</option>
@@ -191,7 +218,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.motherboard"
                       value={formData.components.motherboard}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("motherboard", e)}
                       required
                     >
                       <option value="">Seleziona Scheda Madre</option>
@@ -214,7 +241,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.ram"
                       value={formData.components.ram}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("ram", e)}
                       required
                     >
                       <option value="">Seleziona RAM</option>
@@ -234,7 +261,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.gpu"
                       value={formData.components.gpu}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("gpu", e)}
                       required
                     >
                       <option value="">Seleziona GPU</option>
@@ -257,7 +284,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.storage"
                       value={formData.components.storage}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("storage", e)}
                       required
                     >
                       <option value="">Seleziona Storage</option>
@@ -277,7 +304,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.powerSupply"
                       value={formData.components.powerSupply}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("powerSupply", e)}
                       required
                     >
                       <option value="">Seleziona Alimentatore</option>
@@ -300,7 +327,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.case"
                       value={formData.components.case}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("case", e)}
                       required
                     >
                       <option value="">Seleziona Case</option>
@@ -320,7 +347,7 @@ const EditPresetModal = ({
                       as="select"
                       name="components.cooling"
                       value={formData.components.cooling}
-                      onChange={handleComponentChange}
+                      onChange={(e) => handleComponentChange("cooling", e)}
                       required
                     >
                       <option value="">Seleziona Raffreddamento</option>

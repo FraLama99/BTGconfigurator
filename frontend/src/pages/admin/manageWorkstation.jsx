@@ -513,6 +513,14 @@ const ManageWorkstation = () => {
     }
   };
 
+  // Aggiungi questa funzione per permettere l'aggiornamento diretto dei componenti filtrati
+  const updateFilteredComponents = (componentType, filteredList) => {
+    setFilteredComponents((prev) => ({
+      ...prev,
+      [componentType]: filteredList,
+    }));
+  };
+
   // Modifica la funzione calculateBasePrice per essere più "sicura" nel caso di reset
   const calculateBasePrice = () => {
     // Verifica se ci sono componenti selezionati
@@ -611,6 +619,7 @@ const ManageWorkstation = () => {
                       updateSelectedComponents={updateSelectedComponents}
                       calculateBasePrice={calculateBasePrice}
                       incompatibilityWarnings={incompatibilityWarnings}
+                      updateFilteredComponents={updateFilteredComponents}
                     />
                   </Col>
                 )}
@@ -649,6 +658,7 @@ const ManageWorkstation = () => {
           onSubmit={handleEditSubmit}
           loading={loading}
           incompatibilityWarnings={incompatibilityWarnings}
+          updateFilteredComponents={updateFilteredComponents}
         />
 
         <DeletePresetModal

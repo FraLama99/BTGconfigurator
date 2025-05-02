@@ -86,7 +86,7 @@ const ManageGPUs = () => {
       if (image) {
         const gpuId = response.data._id || response.data.gpu._id;
         const formData = new FormData();
-        formData.append("image", editingGpu.newImage);
+        formData.append("image", image);
         await api.updateGPUImage(gpuId, formData);
       }
 

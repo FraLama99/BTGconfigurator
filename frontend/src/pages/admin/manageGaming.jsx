@@ -5,7 +5,6 @@ import SideAdmin from "../../component/side/sideAdmin";
 import api from "../../utlis/api.js";
 import { useAuth } from "../../utlis/AuthContext.js";
 import AddPresetForm from "../../component/admin/presetGaming/AddPresetForm";
-import ComponentsPreview from "../../component/admin/presetGaming/elimiatoComponentsPreview.jsx";
 import EditPresetModal from "../../component/admin/presetGaming/EditPresetModal";
 import DeletePresetModal from "../../component/admin/presetGaming/DeletePresetModal";
 import PresetsTable from "../../component/admin/presetGaming/PresetsTable";

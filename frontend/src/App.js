@@ -90,7 +90,7 @@ function App() {
           <Route path="/configintamd" element={<SmartLayout><ConfigSelection /></SmartLayout>} />
           <Route path="/preconfigintamd" element={<SmartLayout><PreconfigSelection /></SmartLayout>} />
           <Route path="/myconfiguration" element={<SmartLayout><MyConfiguration /></SmartLayout>} />
-
+          <Route path="/print/order/:orderId" element={<PrintableOrderPage />} />
           {/* Rotte admin protette - usano sempre HeaderAdmin indirettamente tramite SmartLayout */}
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<SmartLayout><AdminHome /></SmartLayout>} />
@@ -105,7 +105,7 @@ function App() {
             <Route path="/admin/manage-gaming-presets" element={<SmartLayout><ManageGaming /></SmartLayout>} />
             <Route path="/admin/manage-workstations" element={<SmartLayout><ManageWorkstation /></SmartLayout>} />
             <Route path="/admin/manage-users" element={<SmartLayout><AdminGestUser /></SmartLayout>} />
-            <Route path="/print/order/:orderId" element={<PrintableOrderPage />} />
+
           </Route>
         </Routes>
       </AuthProvider>

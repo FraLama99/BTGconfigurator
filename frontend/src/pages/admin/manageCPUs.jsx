@@ -54,69 +54,89 @@ const ManageCPUs = () => {
     }
   };
 
+  // Aggiungi questa funzione per preparare i dati
+  const prepareDataForBackend = (formData) => {
+    const data = { ...formData };
+
+    // Converti valori numerici se necessario
+    data.price = Number(data.price) || 0;
+    data.tdp = Number(data.tdp) || 0;
+    data.cores = Number(data.cores) || 0;
+    data.threads = Number(data.threads) || 0;
+    data.baseClock = Number(data.baseClock) || 0;
+    data.boostClock = Number(data.boostClock) || 0;
+    data.stock = Number(data.stock) || 0;
+
+    // Gestisci booleani
+    data.integratedGraphics = Boolean(data.integratedGraphics);
+
+    return data;
+  };
+
+  // Modifica handleCreateSubmit
   const handleCreateSubmit = async (formData, image) => {
     try {
       setLoading(true);
       setError(null);
 
-      // 1. Prima crea la CPU con i dati di base
-      const cpuData = { ...formData };
+      // Prepara i dati per il backend
+      const preparedData = prepareDataForBackend(formData);
+      console.log("Dati della CPU preparati per il backend:", preparedData);
 
-      // Converti valori numerici se necessario
-      if (cpuData.price) cpuData.price = Number(cpuData.price);
-      if (cpuData.tdp) cpuData.tdp = Number(cpuData.tdp);
-      if (cpuData.cores) cpuData.cores = Number(cpuData.cores);
-      if (cpuData.threads) cpuData.threads = Number(cpuData.threads);
-      if (cpuData.baseClock) cpuData.baseClock = Number(cpuData.baseClock);
-      if (cpuData.boostClock) cpuData.boostClock = Number(cpuData.boostClock);
-      if (cpuData.stock) cpuData.stock = Number(cpuData.stock);
+      // Crea la CPU
+      const response = await api.createCPU(preparedData);
+      const newCpuId = response.data._id || response.data.cpu._id;
 
-      // Crea la CPU senza l'immagine
-      const response = await api.createCPU(cpuData);
-      const newCpuId = response.data._id;
+      console.log("Risposta dalla creazione CPU:", response.data);
+      console.log("ID della CPU creata:", newCpuId);
 
-      // 2. Poi, se c'è un'immagine, caricala separatamente
-      let imageUploadError = null;
+      // Se c'è un'immagine, caricala separatamente
       if (image && image instanceof File) {
         try {
           const formData = new FormData();
           formData.append("image", image);
 
-          console.log(
-            "Tentativo di caricamento immagine per nuova CPU:",
-            image.name
-          );
+          console.log("Caricamento immagine per CPU:", {
+            id: newCpuId,
+            nome: image.name,
+            tipo: image.type,
+            dimensione: `${(image.size / 1024).toFixed(2)} KB`,
+          });
+
+          // Usa un timeout prima di caricare l'immagine per assicurarsi che il server abbia
+          // finito di elaborare la creazione della CPU
+          await new Promise((resolve) => setTimeout(resolve, 300));
 
           // API specifica per caricare solo l'immagine
           await api.updateCPUImage(newCpuId, formData);
+          console.log("Immagine caricata con successo");
         } catch (imageError) {
-          console.error(
-            "Errore nel caricamento dell'immagine per nuova CPU:",
-            imageError
-          );
-          imageUploadError =
+          console.error("Errore dettagliato caricamento immagine:", imageError);
+
+          if (imageError.response) {
+            console.error("Risposta server:", imageError.response.data);
+            console.error("Status:", imageError.response.status);
+          }
+
+          // Impostare un messaggio di avviso ma non interrompere il flusso
+          setError(
             "La CPU è stata creata, ma l'immagine non è stata caricata. " +
-            (imageError.response?.data?.message ||
-              "Verifica il formato e la dimensione.");
+              (imageError.response?.data?.message ||
+                "Verifica il formato e la dimensione.")
+          );
         }
       }
 
-      if (imageUploadError) {
-        setSuccess(
-          "CPU creata con successo, ma c'è stato un problema con l'immagine."
-        );
-        setError(imageUploadError);
-      } else {
-        setSuccess("CPU creata con successo!");
-      }
-
+      setSuccess("CPU creata con successo!");
       fetchCPUs();
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error("Errore nella creazione della CPU:", error);
+      console.error("Errore completo nella creazione della CPU:", error);
       setError(
         "Errore nella creazione della CPU: " +
-          (error.response?.data?.message || "Verifica i dati e riprova.")
+          (error.response?.data?.message ||
+            error.message ||
+            "Verifica i dati e riprova.")
       );
     } finally {
       setLoading(false);
@@ -150,15 +170,23 @@ const ManageCPUs = () => {
     }
   };
 
+  // Modifica anche handleEditSubmit in modo simile
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
       setError(null);
 
-      // 1. Prima aggiorna i dati della CPU (senza l'immagine)
-      const cpuData = { ...editingCpu };
+      if (!editingCpu) {
+        setError("Nessuna CPU da modificare");
+        setLoading(false);
+        return;
+      }
 
+      console.log("Dati della CPU prima della preparazione:", editingCpu);
+
+      // Crea un nuovo oggetto escludendo campi non necessari
+      const cpuToUpdate = { ...editingCpu };
       // Rimuovi i campi che non devono essere inviati
       const fieldsToRemove = [
         "_id",
@@ -169,68 +197,65 @@ const ManageCPUs = () => {
         "imagePreview",
         "image",
       ];
-      fieldsToRemove.forEach((field) => delete cpuData[field]);
+      fieldsToRemove.forEach((field) => delete cpuToUpdate[field]);
 
-      // Converti valori numerici se necessario
-      if (cpuData.price) cpuData.price = Number(cpuData.price);
-      if (cpuData.tdp) cpuData.tdp = Number(cpuData.tdp);
-      if (cpuData.cores) cpuData.cores = Number(cpuData.cores);
-      if (cpuData.threads) cpuData.threads = Number(cpuData.threads);
-      if (cpuData.baseClock) cpuData.baseClock = Number(cpuData.baseClock);
-      if (cpuData.boostClock) cpuData.boostClock = Number(cpuData.boostClock);
-      if (cpuData.stock) cpuData.stock = Number(cpuData.stock);
+      // Prepara i dati per il backend
+      const preparedData = prepareDataForBackend(cpuToUpdate);
+      console.log(
+        "Dati della CPU preparati per l'aggiornamento:",
+        preparedData
+      );
 
-      // Effettua l'update dei dati
-      await api.updateCPU(editingCpu._id, cpuData);
+      // Aggiorna la CPU
+      await api.updateCPU(editingCpu._id, preparedData);
 
-      // 2. Poi, se c'è una nuova immagine, gestiscila separatamente
-      let imageUploadError = null;
+      // Se c'è una nuova immagine, caricala separatamente
       if (editingCpu.newImage && editingCpu.newImage instanceof File) {
         try {
           const formData = new FormData();
           formData.append("image", editingCpu.newImage);
 
-          console.log(
-            "Tentativo di caricamento immagine CPU:",
-            editingCpu.newImage.name,
-            {
-              tipo: editingCpu.newImage.type,
-              dimensione: `${(editingCpu.newImage.size / 1024).toFixed(2)} KB`,
-            }
-          );
+          console.log("Caricamento immagine per CPU:", {
+            id: editingCpu._id,
+            nome: editingCpu.newImage.name,
+            tipo: editingCpu.newImage.type,
+            dimensione: `${(editingCpu.newImage.size / 1024).toFixed(2)} KB`,
+          });
+
+          // Usa un timeout prima di caricare l'immagine
+          await new Promise((resolve) => setTimeout(resolve, 300));
 
           // API specifica per caricare solo l'immagine
           await api.updateCPUImage(editingCpu._id, formData);
+          console.log("Immagine aggiornata con successo");
         } catch (imageError) {
-          console.error(
-            "Errore nel caricamento dell'immagine CPU:",
-            imageError
+          console.error("Errore dettagliato caricamento immagine:", imageError);
+
+          if (imageError.response) {
+            console.error("Risposta server:", imageError.response.data);
+            console.error("Status:", imageError.response.status);
+          }
+
+          // Non bloccare l'operazione ma mostra un avviso
+          setError(
+            "La CPU è stata aggiornata, ma l'immagine non è stata caricata. " +
+              (imageError.response?.data?.message ||
+                "Verifica il formato e la dimensione.")
           );
-          imageUploadError =
-            "L'immagine della CPU non è stata aggiornata. " +
-            (imageError.response?.data?.message ||
-              "Verifica il formato e la dimensione.");
         }
       }
 
       setShowEditModal(false);
+      setSuccess("CPU aggiornata con successo!");
       fetchCPUs();
-
-      if (imageUploadError) {
-        setSuccess(
-          "CPU aggiornata con successo, ma c'è stato un problema con l'immagine."
-        );
-        setError(imageUploadError);
-      } else {
-        setSuccess("CPU aggiornata con successo!");
-      }
-
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      console.error("Errore nell'aggiornamento della CPU:", error);
+      console.error("Errore completo nell'aggiornamento della CPU:", error);
       setError(
         "Errore nell'aggiornamento della CPU: " +
-          (error.response?.data?.message || "Verifica i dati e riprova.")
+          (error.response?.data?.message ||
+            error.message ||
+            "Verifica i dati e riprova.")
       );
     } finally {
       setLoading(false);
