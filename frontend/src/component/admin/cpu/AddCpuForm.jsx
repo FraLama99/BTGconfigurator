@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import { Form, Button, Spinner } from "react-bootstrap";
 import CpuFormFields from "./CpuFormFields";
 
 const AddCpuForm = ({ onSubmit, loading }) => {

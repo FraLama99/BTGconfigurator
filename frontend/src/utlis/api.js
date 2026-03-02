@@ -414,12 +414,12 @@ const api = {
         return response;
     }),
     // Crea un nuovo ordine
-    createOrder: (orderData) => axios.post('/orders', orderData, {
-        headers: { 'Content-Type': 'application/json' }
-    }),
+    // createOrder: (orderData) => axios.post('/orders', orderData, {
+    //     headers: { 'Content-Type': 'application/json' }
+    //   }),
 
     // Ottieni un ordine specifico
-    getOrderById: (id) => axios.get(`/orders/${id}`),
+    //   getOrderById: (id) => axios.get(`/orders/${id}`),
 
     // Ottiene tutti gli ordini dell'utente
     getUserOrders: () => axios.get('/orders'),

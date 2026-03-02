@@ -89,7 +89,7 @@ const RegisterPage = () => {
     } else {
       const today = new Date();
       const birthDate = new Date(formData.dataNascita);
-      const age = today.getFullYear() - birthDate.getFullYear();
+      let age = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
@@ -168,14 +168,14 @@ const RegisterPage = () => {
       });
 
       toast.success(
-        "Registrazione completata con successo! Effettua il login."
+        "Registrazione completata con successo! Effettua il login.",
       );
       navigate("/login");
     } catch (error) {
       console.error("Errore durante la registrazione:", error);
       setApiError(
         error.response?.data?.message ||
-          "Si è verificato un errore durante la registrazione. Riprova più tardi."
+          "Si è verificato un errore durante la registrazione. Riprova più tardi.",
       );
       toast.error("Errore durante la registrazione");
     } finally {
