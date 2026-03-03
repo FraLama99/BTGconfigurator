@@ -1,13 +1,18 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-const mailer = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-    },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Compatibile con mailer.sendMail() usato in user_routes.js
+const mailer = {
+    sendMail: async ({ from, to, subject, text, html }) => {
+        return resend.emails.send({
+            from: from || 'BTG System <noreply@3dlama.it>',
+            to,
+            subject,
+            text,
+            html
+        });
+    }
+};
 
 export default mailer;

@@ -1,18 +1,8 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import dotenv from 'dotenv';
-
 dotenv.config();
-
-// Configurazione del trasporto email
-const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: true,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-    },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
+const EMAIL_FROM = 'BTG Configurator <noreply@3dlama.it>';
 
 // Funzione per inviare email di conferma ordine con dettagli
 export const sendOrderConfirmation = async (email, name, orderNumber, estimatedDelivery, details = {}) => {
@@ -41,7 +31,7 @@ export const sendOrderConfirmation = async (email, name, orderNumber, estimatedD
             new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(details.totalPrice) :
             "N/A";
 
-        await transporter.sendMail({
+        await resend.emails.send({
             from: `"BTG Configurator" <${process.env.EMAIL_CERT}>`,
             to: email,
             subject: `Conferma Ordine #${orderNumber}`,
@@ -114,7 +104,7 @@ export const sendOrderStatusUpdate = async (email, name, orderNumber, status, es
                 additionalText = `La consegna è prevista per il ${deliveryDate}.`;
         }
 
-        await transporter.sendMail({
+        await resend.emails.send({
             from: `"BTG Configurator" <${process.env.EMAIL_USER}>`,
             to: email,
             subject,
