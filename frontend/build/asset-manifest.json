@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/static/css/main.16c08758.css",
+    "main.js": "/static/js/main.b8a6f332.js",
+    "static/js/488.93785525.chunk.js": "/static/js/488.93785525.chunk.js",
+    "static/media/team.jpg": "/static/media/team.80b272729ad52c562c8d.jpg",
+    "static/media/logo.png": "/static/media/logo.f38ecdf6f0195194132c.png",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
+    "static/media/intel-logo.png": "/static/media/intel-logo.14f105a0548a4737dcb5.png",
+    "static/media/amd-seeklogo.png": "/static/media/amd-seeklogo.557ba4fa69603794135b.png",
+    "index.html": "/index.html",
+    "main.16c08758.css.map": "/static/css/main.16c08758.css.map",
+    "main.b8a6f332.js.map": "/static/js/main.b8a6f332.js.map",
+    "488.93785525.chunk.js.map": "/static/js/488.93785525.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.16c08758.css",
+    "static/js/main.b8a6f332.js"
+  ]
+}
