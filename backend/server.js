@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 
 app.use(cors({
     origin: ['http://localhost:3000',
-        'https://btgconfigurator.onrender.com',
+        'https://btg-configurator.onrender.com',
         'https://btg-configurator.vercel.app', "http://10.0.0.115:3000"],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],

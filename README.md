@@ -6,7 +6,7 @@
 
 ### ricordati di compilare il file .env come dersritto nel esempio.
 
-# Link di riferimento per provare l'applicativo lato cliente : https://bt-gconfigurator.vercel.app
+# Link di riferimento per provare l'applicativo lato cliente : https://btg-gconfigurator.vercel.app
 
 # 🖥️ BTG System Configurator 🛠️
 
