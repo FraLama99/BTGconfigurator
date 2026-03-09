@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const mailer = {
     sendMail: async ({ from, to, subject, text, html }) => {
         return resend.emails.send({
-            from: from || 'BTG System <noreply@3dlama.it>',
+            from: from || process.env.EMAIL_FROM,
             to,
             subject,
             text,

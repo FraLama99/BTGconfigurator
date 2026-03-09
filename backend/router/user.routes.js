@@ -66,7 +66,7 @@ routerUser.post('/users/register', hashPassword, async (req, res, next) => {
         // Invia email di benvenuto
         try {
             await mailer.sendMail({
-                from: 'info@3dlama.it',
+                from: process.env.EMAIL_FROM,
                 to: email,
                 subject: 'Benvenuto su BTG System',
                 text: `Benvenuto ${name} ${surname}! La tua registrazione è stata completata con successo.`,
@@ -175,7 +175,7 @@ routerUser.post('/users/reset-password', generateResetToken, async (req, res) =>
         const resetUrl = `${process.env.FRONTEND_HOST}/reset-password/${req.resetToken}`;
 
         await mailer.sendMail({
-            from: 'info@3dlama.it',
+            from: process.env.EMAIL_FROM,
             to: req.user.email,
             subject: 'Reset Password BTG System',
             text: `Per reimpostare la tua password, clicca sul seguente link: ${resetUrl}. Il link è valido per 10 minuti.`,

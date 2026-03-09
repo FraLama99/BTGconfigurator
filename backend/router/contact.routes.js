@@ -10,8 +10,8 @@ router.post('/send-message', async (req, res) => {
         const { nome, cognome, email, telefono, messaggio, richiamami } = req.body;
 
         const mailOptions = {
-            from: process.env.EMAIL_CERT,
-            to: process.env.EMAIL_CERT,
+            from: process.env.EMAIL_FROM,
+            to: 'info@3dlama.it',
             replyTo: email,
             subject: "Nuovo messaggio dal form di contatto BTG SYS",
             html: `

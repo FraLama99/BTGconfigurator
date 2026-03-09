@@ -2,7 +2,6 @@ import { Resend } from 'resend';
 import dotenv from 'dotenv';
 dotenv.config();
 const resend = new Resend(process.env.RESEND_API_KEY);
-const EMAIL_FROM = 'BTG Configurator <noreply@3dlama.it>';
 
 // Funzione per inviare email di conferma ordine con dettagli
 export const sendOrderConfirmation = async (email, name, orderNumber, estimatedDelivery, details = {}) => {
@@ -32,7 +31,7 @@ export const sendOrderConfirmation = async (email, name, orderNumber, estimatedD
             "N/A";
 
         await resend.emails.send({
-            from: `"BTG Configurator" <${process.env.EMAIL_CERT}>`,
+            from: process.env.EMAIL_FROM,
             to: email,
             subject: `Conferma Ordine #${orderNumber}`,
             html: `
@@ -105,7 +104,7 @@ export const sendOrderStatusUpdate = async (email, name, orderNumber, status, es
         }
 
         await resend.emails.send({
-            from: `"BTG Configurator" <${process.env.EMAIL_USER}>`,
+            from: process.env.EMAIL_FROM,
             to: email,
             subject,
             html: `
